@@ -92,8 +92,6 @@ li t5, PLIC_BASE + PLIC_ENABLE # Loads value in t5 of sum of PLIC_BASE and PLIC_
 sw t4, 0(t5) # Stores value in t4, into the address in t5, to enable PLIC for S1 interrupt.
                    
 
-# ----------------Set PLIC priority for S1 interrupt to 7 "Highest Priority"-----------
-# -----------The address is calculated according to: PLIC_BASE + 4 × S1_PLIC_ID--------
 li t4, S1_PRIORITY # Loads value of S1_PRIORITY (7) into t4.
 li t5, S1_PLIC_ID # Loads value of S1_PLIC_ID (20) into register t5.
 slli t5, t5, 2 # Shifts left logical t5 by 2, to multiply S1_PLIC_ID by 4.
@@ -102,7 +100,6 @@ add t5, t5, t3 # Adds the value in t5 (4*S1_PLIC_ID) and t3 (PLIC_BASE).
 sw t4, 0(t5) # Stores value in t4 (S1_PRIORITY) into address stored in t5 (0xC000050)
 
 
-# -------------------------------Set PLIC threshold to 6-------------------------------
 li t5, PLIC_BASE + PLIC_THRESHOLD # Loads value of PLIC_BASE + PLIC_THRESHOLD (0x0E000000).
 li t4, 6 # Loads immediate value of 6 onto register t4.
 sw t4, 0(t5) # Stores 6 onto address into t5 (0x0E000000) to set PLIC threshold to 6.
@@ -263,3 +260,4 @@ RandomNum:
       addi sp, sp, 16                           # Restore the stack pointer by adding 16.
 
       ret                                       # Return from the subroutine, passing the generated random number in a7.
+
