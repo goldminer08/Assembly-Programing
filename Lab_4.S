@@ -1,16 +1,3 @@
-# ------------------------------------------------------------------
-# Student Information
-# ------------------------------------------------------------------
-# Lab number            : 4
-# Group number          : 43
-# Section number        : 203
-# Student-1 name        : Gabriel Graterol
-# Student-2 name        : Pasindu Danthanarayana
-# ------------------------------------------------------------------
-# -------------- YOUR CODE MUST BE WELL COMMENTED ------------------
-# -------------- YOU MAY REMOVE UNNECESSARY COMMENTS ---------------
-# ------------------------------------------------------------------
-
 .section .text
 .align 2
 .globl _start
@@ -274,4 +261,5 @@ RandomNum:
       lw t3, 4(sp)                              # Load the value of t3 back from the stack.
       lw ra, 8(sp)                              # Load the return address (ra) back from the stack.
       addi sp, sp, 16                           # Restore the stack pointer by adding 16.
+
       ret                                       # Return from the subroutine, passing the generated random number in a7.
