@@ -1,6 +1,6 @@
 # Assembly-Programing
 ## About
-This repository contains **all RISC-V assembly code** for my ECE labs on the SiFive FE310-G002, covering GPIO, polling/interrupts, timing loops, and LED-based output.
+This repository contains **all RISC-V assembly code** for projects on the SiFive FE310-G002, covering GPIO, polling/interrupts, timing loops, and LED-based output.
 
 ## Lab 3: Input / Output Interfacing
 Lab 3 focuses on GPIO input/output on a RISC-V microprocessor, starting with an 8-bit LED binary counter to verify correct LED/GPIO mapping.  
