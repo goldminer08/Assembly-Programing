@@ -1,17 +1,3 @@
-# ------------------------------------------------------------------
-# Student Information
-# ------------------------------------------------------------------
-# Lab number            : 3
-# Group number          : 43
-# Section number        : 203
-# Student-1 name        : Gabriel Graterol
-# Student-2 name        : Pasindu Danthanarayana
-# ------------------------------------------------------------------
-# -------------- YOUR CODE MUST BE WELL COMMENTED ------------------
-# -------------- YOU MAY REMOVE UNNECESSARY COMMENTS ---------------
-# ------------------------------------------------------------------
-
-
 .section .text
 .align 2
 .globl _start
@@ -20,7 +6,6 @@
 _start:
     
     # GPIO Control Registers Memory Mapping
-    # -----------------------------write the instructions here-----------------------------
     .equ GPIO_BASE_CTRL_ADDR,   0x10012000      # Base address for GPIO control registers
     .equ GPIO_OUTPUT_EN,        0x08            # Offset to enable GPIO outputs
     .equ GPIO_OUTPUT_VAL,       0x0C            # Offset to write GPIO outputs
@@ -29,7 +14,7 @@ _start:
 
 
     # Define GPIO Pin Mapping for LEDs (8 LEDs in LED bar, LED6)
-    # -----------------------------write the instructions here-----------------------------
+
     .equ GPIO_7SEGLED_PINS, 0x0000023F          # Seven Segment LED Display Pins (7)
     .equ GPIO_LEDBAR_PINS,  0x00FC0C00          # LED Bar Pins (8)
     .equ GPIO_ALL_LED_PINS, 0x00FC0E3F          # All LED Pins (15)
@@ -38,14 +23,12 @@ _start:
 
 
     # Configure the GPIO Outputs for all LEDs
-    # -----------------------------write the instructions here-----------------------------
     li t0, GPIO_BASE_CTRL_ADDR # loads value of GPIO_BASE_CTRL_ADDR into register t0.
     li t1, GPIO_ALL_LED_PINS # loads value of GPIO_ALL_LED_PINS into register t1.
     sw t1, GPIO_OUTPUT_EN(t0) # Stores value from t1 (0x00FC0E3F) into address in t0 (0x10012000), with an offset of GPIO_OUTPUT_EN (0x08) to store value of t1 into address 0x10012008.
 
 
     # Define GPIO Pin Mapping for Pushbuttons (S1, S2, and both)
-    # -----------------------------write the instructions here-----------------------------
     .equ GPIO_PUSH_S1, 0x00001000 # Sets position of push button S1 onto variable GPIO_PUSH_S1.
     .equ GPIO_PUSH_S2, 0x00002000 # Sets position of push button S2 onto variable GPIO_PUSH_S2.
     .equ GPIO_PUSH_BUTTONS, 0x00003000 # Stores position of push button S1 and S2 onto variable GPIO_PUSH_BUTTONS.
@@ -53,26 +36,23 @@ _start:
 
 
     # Configure the GPIO Inputs for the pushbuttons used (S1, S2, or both)
-    # -----------------------------write the instructions here-----------------------------
     li t2, GPIO_PUSH_BUTTONS # Loads value of GPIO_PUSH_BUTTONS onto t2 to enable the buttons as inputs.
     sw t2, GPIO_INPUT_EN(t0) # Stores the value in t2 into GPIO_BASE_CTRL_ADDR, with offset GPIO_INPUT_EN (0x10012004)
 
 
     # Turn off all LEDs
-    # -----------------------------write the instructions here-----------------------------
     li t1, 0x00000000 # loads value of 0x00000000 into register t1.
     sw t1, GPIO_OUTPUT_VAL(t0) # Stores value in t1 (0x00000000) into address stored in t0, with offset of GPIO_OUTPUT_VAL (0x1001200C)
 
 
-# ----------------------Initialize the pseudo-random number generator-----------------------
+
 InitRandomNum:
     # Sets a7 to a 16-bit non-zero value; only the PRNG subroutine should modify a7
     li a7, 0xABCD
 
 
-# -------------------Task 1: LED Binary Counter and GPIO Verification----------------------
+# -------------------LED Binary Counter and GPIO Verification----------------------
 Task_1:
-    # -----------------------------write the instructions here-----------------------------
     li s0, 0x00 # Loads immediate value onto s0, as starting value of counter
     li s1, 0xFF # Loads 0xFF onto s1 for branch condition for loop
     loop: # Loop used for displaying counter on LEDs
@@ -135,7 +115,6 @@ LED_OFF:
 
     ret # returns to where this subroutine was called.
 Delay100m:
-    # -----------------------------write the instructions here-----------------------------
     addi sp, sp, -4 # Allocates 4 bytes on the stack to store one 32 bit register.
     sw ra, 0(sp) # Stores return address onto the stack.
 
@@ -152,7 +131,6 @@ Delay100m:
 
 # ----------------------------------Task 2: Reflex Meter-----------------------------------
 Task_2:
-    # -----------------------------write the instructions here-----------------------------
     jal ra, LED_OFF # Jumps to LED_OFF subroutine to turn off all LEDs.
     jal ra, RandomNum # Jumps to RandomNum subroutine to generate a random number for delay.
     jal ra, Scale # Jumps to Scale subroutine to scale the value given by RandomNum to be in required range.
@@ -245,9 +223,7 @@ delay5secs: # Delay subroutine used to delay 5 seconds.
     addi sp, sp, 8  # Deallocates stack frame of this subroutine.
 
     ret
-    # --------------------------------Use the Stack Properly-------------------------------
-    # -----------------Refer to the lab manual for more detail about stack-----------------
-    # ----------------------------------Counter--------------------------------------------
+
 delay: # Delay of 0.1ms
     addi sp, sp, -8 # Allocates 8 bytes on stack to store ra and s4 register.
     sw ra, 0(sp)
@@ -324,7 +300,6 @@ RandomNum:
 # ---------------------------- DELAY ROUTINES -----------------------
 # Create as much as you need.
 DelayRNG:
-    # -----------------------------write the instructions here-----------------------------
     addi sp, sp, -16 # Allocates 16 bytes on stack to store values in ra, s3, s4, and s5 registers.
     sw ra, 0(sp)
     sw s3, 8(sp)
@@ -359,22 +334,4 @@ DelayRNG:
 
 End:
     .end
-# ---------------------------------------------------------------Lab Report Questions----------------------------------------------------------------------------------
-# a)
-# To test the delay, we used a timer to time the first random delay, which is 8 seconds. By using a phone timer, we measured that this delay took 7.73 secs before LED6
-# Turned on. A 5% tolerance for 8 seconds has a range of 7.6-8.4. Thus, our recorded value of 7.73 seconds falls within the required tolerance.
-#  
-# b)
-# i) In an 8 bit counter, the maximum value that can be stored is 255, so the maximum amount of time that can be stored is 255*(0.1m), which is 0.0255 seconds.
-# 
-# ii) In a 16 bit counter, the maximum value that can be stored is 65 535, so the maximum amount of time that can be stored is 65 535*(0.1m), which is 6.5535 seconds.
-# 
-# iii) In a 24 bit counter, the maximum value that can be stored is 16 777 215, so the maximum amount of time that can be stored is 16 777 215*(0.1m), which is 1677.722 
-# seconds, which is about 27.96 minutes.
-# 
-# iv) In a 32 bit counter, the maximum value that can be stored is 4 294 967 295, so the maximum amount of time that can be stored is 4 294 967 295*(0.1m), which is 
-# 429 496.7295 seconds, which is about 7158.278825 minutes, or 119.3046 hours.
-# 
-# c) On average, the typical human reaction time is around 220-250 ms, based on various tests conducted. Due to this a size of 16 bits would fit best for this task, as 
-# 8 bits will be too small to account for the average time (25.5 ms: around 10 times less than average reaction time), and the 16 bit counter contains the average reaction time,
-# with the least amount of bits required to store this counter. Due to this, a 16 bit counter size is best suited for this application.
+
